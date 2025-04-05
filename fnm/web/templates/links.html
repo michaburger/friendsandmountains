@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Additional Links{% endblock %}
+
+{% block header_image %}
+<div class="image-container">
+    <img src="{% static 'images/links.jpg' %}" class="img-fluid w-100" alt="Links">
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Additional Links</h1>
+<p class="lead mb-4">Here I profit to link some other useful stuff and other amazing Couchsurfing events.</p>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            <i class="bi bi-facebook me-2"></i>Couchsurfing Camps Facebook Page
+        </h5>
+        <p class="card-text">Join the Facebook group to stay updated on Couchsurfing camps around the world.</p>
+        <p class="card-text">Including a calendar document to group Couch crashes & gatherings globally.</p>
+        <a href="https://www.facebook.com/groups/couchsurfingcamps/" class="btn btn-primary" target="_blank">
+            Visit Facebook Group
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            <i class="bi bi-calendar-event me-2"></i>Global Couchsurfing Events Calendar
+        </h5>
+        <p class="card-text">Find Couchsurfing events happening worldwide through the official calendar.</p>
+        <a href="https://blog.couchsurfing.com/calendar/" class="btn btn-primary" target="_blank">
+            View Calendar
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">
+            <i class="bi bi-phone me-2"></i>droply water finder app
+        </h5>
+        <p class="card-text">My personal project but certainly useful for hiking! Support us by downloading the app and adding water sources worldwide while on a hike or city trip.</p>
+        <a href="https://droply-app.com" class="btn btn-primary" target="_blank">
+            Downlaod app
+        </a>
+    </div>
+</div>
+
+<!-- Optional: Add Bootstrap Icons for the cards -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

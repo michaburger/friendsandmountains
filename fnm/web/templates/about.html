@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About this Project{% endblock %}
+
+{% block header_image %}
+<div class="image-container">
+    <img src="{% static 'images/about.jpg' %}" class="img-fluid w-100" alt="About Friends and Mountains">
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>About this project</h1>
+<p class="lead">A community of internationals, meeting in the Swiss mountains and making friends</p>
+<br>
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <h2>What's it all about?</h2>
+        <p>
+            This project was initially called "Couchsurfing Camps." However, since we've always welcomed people from 
+            outside the Couchsurfing community, we decided to adopt the more inclusive name "Friends and Mountains." 
+            We are essentially a group of internationals meeting in the Swiss mountains and making friends. But don't worry,
+            we remain connected to the Couchsurfing community - that's why we kept the orange color!
+        </p>
+        
+        <p>
+            Couchsurfing has a wonderful community of travelers and open-minded people who typically host others in their homes 
+            for free and share memorable experiences. Like any community, we enjoy gathering in larger groups. While some meet 
+            in bars or organize city couch crashes, we in Switzerland prefer mountain camps!
+        </p>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-8">
+        <h2>Why mountain camps?</h2>
+        <p>
+            In Switzerland, hostels are relatively expensive (over €50 per night) and our cities are smaller compared to other 
+            countries, making it challenging to organize gatherings and host everyone. At the same time, we're blessed with 
+            stunning mountains and nature - so why not combine them in an event?
+        </p>
+        <p>
+            Renting a chalet for a group is more affordable - approximately €20 per person - and we can share food costs, 
+            making it accessible to people from all backgrounds.
+        </p>
+        <p>
+            The ambiance doesn't suffer from everyone being inside the hut - quite the opposite! We've always had amazing vibes -
+            cooking together, playing board games, making music, and for New Year's events, even building jacuzzis and hosting 
+            costume parties.
+        </p>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Highlights from past events</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-light">Cooking local food together (like Raclette)</li>
+                    <li class="list-group-item bg-light">Building heated pools with help from the Jacuzzi Association</li>
+                    <li class="list-group-item bg-light">New Year's costume parties</li>
+                    <li class="list-group-item bg-light">Hiking and exploring the Swiss Alps</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <h2>How did it all start?</h2>
+        <p>
+            The first 10 editions of the New Year's camp were organized by Giuze, who started the initiative and grew the event 
+            from a small gathering in a hut without electricity to the New Year's celebration it is today. After the 10th edition, 
+            Mikka decided this type of event was too good to let go and organized the 11th NYE edition in the Bernese mountains 
+            and the 1st CS summer camp in Graubünden, with an entirely new group of people.
+        </p>
+        <p>
+            The tradition continues, and we're excited to see what the future brings. Perhaps we'll form an association or organize 
+            other exciting events! Feel free to reach out if you have ideas or if you've attended an event and want to get more 
+            involved in the organization.
+        </p>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <h2>Why this website?</h2>
+        <p>
+            While it might seem unnecessary given the existence of couchsurfing.com, this website provides newcomers with a glimpse 
+            of what our events look like. Additionally, for more complex events like ours (involving house reservations and food 
+            purchases for everyone), automated registration and payment systems are invaluable, especially as we operate on a volunteer basis.
+        </p>
+        <p>
+            Our events are completely non-commercial and volunteer-driven, but since we need to rent accommodation and share food, 
+            there is a participation fee that we strive to keep as affordable as possible.
+        </p>
+    </div>
+</div>
+
+<div class="card mb-5">
+    <div class="card-header bg-primary text-white">
+        <h2 class="h4 mb-0">Legal Information & Organization</h2>
+    </div>
+    <div class="card-body">
+        <h3 class="h5">Who's organizing?</h3>
+        <p>
+            <strong>Mikka</strong> is the main organizer and handles all the administrative aspects of each event. 
+            Past participants often help during events with tasks like shopping. We typically have a helpful group of volunteers.
+        </p>
+        <p>
+            We're considering establishing a Swiss association to ensure the long-term sustainability of these events.
+        </p>
+        <p>
+            <strong>Contact:</strong> Mikka - <a href="https://www.couchsurfing.com/people/mikkaboris" target="_blank">Couchsurfing Profile</a>
+        </p>
+        <address class="mb-3">
+            <strong>Address:</strong><br>
+            Friends and Mountains<br>
+            c/o Micha Burger<br>
+            Tonisbachstrasse 35<br>
+            CH-3510 Konolfingen<br>
+            Switzerland
+        </address>
+        <p class="text-muted small">
+            This website and all associated events are non-commercial, volunteer-driven initiatives. 
+            Fees collected are solely for covering accommodation and shared food costs.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Custom Page{% endblock %}
+
+{% block header_image %}
+<div class="image-container">
+    <img src="{% static 'images/mountains.jpg' %}" class="img-fluid w-100" alt="Custom Header">
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Custom Content</h1>
+<p>This content will override the default content in the base template.</p>
+{% endblock %}

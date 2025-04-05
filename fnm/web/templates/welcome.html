@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Welcome to Friends and Mountains</h1>
+
+    <div class="mb-4">
+        <p>Welcome to Friends and Mountains, a unique event for people with an international mindset who want to explore the Swiss mountains, make new connections, and take a break from their usual routines. Whether you're a traveler, a Couchsurfing or Bewelcome community member, a digital nomad, an expat, or simply someone curious to join, you're invited! Around one-third of participants return multiple times, so you'll likely meet familiar faces, but we are always welcoming to newcomers. The main language spoken during the event is English, though our participants come from diverse linguistic backgrounds, including German, French, Spanish, and more.</p>
+    </div>
+
+    <!-- Image Row 1 -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/group1.jpg' %}" alt="Friends and Mountains Group" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/group2.jpg' %}" alt="Friends and Mountains Group" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/group3.jpg' %}" alt="Friends and Mountains Group" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <p>Our goal is simple: spend great days in the mountains, enjoy each other's company, and disconnect from work and daily life. There's no rigid program, but we offer a few ideas for activities. The group often decides what to do together, whether it's hiking, cooking, or evening games. If you have an idea for something fun, feel free to organize it, or propose an activity that you'd like to share with the group! The vibe is relaxed, and everyone has the chance to bring something to the table.</p>
+    </div>
+
+    <!-- Image Row 2 -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/activity1.jpg' %}" alt="Group Activities" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/activity2.jpg' %}" alt="Group Hiking" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/activity3.jpg' %}" alt="Evening Games" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <p>When it comes to comfort, we focus more on creating a welcoming and collaborative atmosphere than luxury. We stay in a group house with rooms that typically accommodate 4-8 beds or more. Cooking together and keeping the house tidy is part of the experience, as everyone pitches in. The main purpose of this event is to connect with others from different cultures and share meaningful moments, not to seek maximum comfort.</p>
+    </div>
+
+    <!-- Image Row 3 -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/together1.jpg' %}" alt="Board Games" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/together2.jpg' %}" alt="Group Cooking" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+        <div class="col-md-4 mb-3">
+            <img src="{% static 'images/welcome/together3.jpg' %}" alt="Garden Party" class="img-fluid rounded-1 clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, this.alt)">
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <p>Feel free to browse our website to learn more about past and upcoming events. Be sure to mark the date for our next adventure in the mountains on your calendar! We look forward to seeing you there and creating more unforgettable experiences together.</p>
+    </div>
+
+    <div class="text-center mt-5 mb-4">
+        <a href="{% url 'future' %}" class="btn btn-primary me-2">Upcoming Events</a>
+        <a href="{% url 'registration' %}" class="btn btn-primary">Register Now</a>
+    </div>
+</div>
+
+<!-- Modal for displaying enlarged images -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this JavaScript at the end of your content block -->
+<script>
+    function showImage(src, alt) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('modalImage').alt = alt;
+        document.getElementById('imageModalLabel').textContent = alt;
+    }
+
+    // Add cursor pointer to all clickable images
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.clickable-image');
+        images.forEach(img => {
+            img.style.cursor = 'pointer';
+        });
+    });
+</script>
+{% endblock %}
