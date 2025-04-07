@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Friends and Mountains{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'css/brite.css' %}">
+    <!-- To support leaflet maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     {% block extra_css %}{% endblock extra_css %}
 </head>
 <body>
@@ -21,7 +25,7 @@
                 {% block navigation %}
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'welcome' %}">Welcome</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Next events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'future' %}">Next events</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'past' %}">Past events</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'registration' %}">Registration</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'links' %}">Links</a></li>
@@ -33,8 +37,11 @@
 
     <!-- Image Container -->
     {% block header_image %}
-    <div class="image-container">
-        <img src="{% static 'images/fire.jpg' %}" class="img-fluid w-100" alt="Header Image">
+    <div class="image-container" style="height: 600px;">
+        <img src="{% block header_image_src %}{% static 'images/fire.jpg' %}{% endblock header_image_src %}" 
+             class="img-fluid w-100" 
+             style="height: 100%; object-fit: cover;" 
+             alt="{% block header_image_alt %}Switzerland Mountain Camps{% endblock header_image_alt %}">
     </div>
     {% endblock header_image %}
 

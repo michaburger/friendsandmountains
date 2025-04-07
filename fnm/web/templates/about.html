@@ -3,11 +3,9 @@
 
 {% block title %}About this Project{% endblock %}
 
-{% block header_image %}
-<div class="image-container">
-    <img src="{% static 'images/about.jpg' %}" class="img-fluid w-100" alt="About Friends and Mountains">
-</div>
-{% endblock %}
+{% block header_image_src %}
+{% static 'images/about.jpg' %}
+{% endblock header_image_src %}
 
 {% block content %}
 <h1>About this project</h1>

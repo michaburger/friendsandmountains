@@ -3,11 +3,13 @@
 
 {% block title %}My Custom Page{% endblock %}
 
-{% block header_image %}
-<div class="image-container">
-    <img src="{% static 'images/mountains.jpg' %}" class="img-fluid w-100" alt="Custom Header">
-</div>
-{% endblock %}
+{% block header_image_src %}
+    {% static 'images/another-image.jpg' %}
+{% endblock header_image_src %}
+
+{% block header_image_alt %}
+    Alternative Text for This Page
+{% endblock header_image_alt %}
 
 {% block content %}
 <h1>Custom Content</h1>

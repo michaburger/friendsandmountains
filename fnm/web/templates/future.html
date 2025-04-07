@@ -1,10 +1,34 @@
 {% extends "base.html" %}
+{% load markdown_deux_tags %}
 {% block title %}Upcoming Events{% endblock %}
 {% block content %}
 <h1>Upcoming Events</h1>
-<ul>
-    {% for todo in todos %}
-        <li>{{ todo.title }} - {% if todo.completed %}Completed{% else %}Not Completed{% endif %}</li>
+
+<div class="general-info">
+    {{ general_info.general_description|markdown }}
+</div>
+
+<div class="events-grid">
+    {% for event in events %}
+        <div class="event-card future-event">
+            <img src="{{ event.main_image.url }}" alt="{{ event.title }}">
+            <h2>{{ event.title }}</h2>
+            <p>{{ event.start_date|date:"M d, Y" }} - {{ event.end_date|date:"M d, Y" }}</p>
+            <p>{{ event.location_name }}</p>
+            
+            {% if event.fee %}
+                <p class="event-fee">{{ event.fee|floatformat:2 }} €</p>
+            {% endif %}
+            
+            <a href="{% url 'event_detail' event.slug %}" class="event-link">View Details</a>
+        </div>
+    {% empty %}
+        <p>No upcoming events scheduled at this time.</p>
     {% endfor %}
-</ul>
+</div>
+
+<div class="registration-info">
+    <h2>Registration Information</h2>
+    {{ general_info.registration_description|markdown }}
+</div>
 {% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block header_image_src %}
+    {{ event.main_image.url }}
+{% endblock header_image_src %}
+
+{% block content %}
+<div class="event-detail">
+  <div class="event-header">
+    <h1>{{ event.title }}</h1>
+    <div class="event-dates">
+      <span class="date">{{ event.start_date|date:"F d, Y" }} - {{ event.end_date|date:"F d, Y" }}</span>
+      <span class="location">{{ event.location_name }}</span>
+    </div>
+  </div>
+
+  <div class="event-content">
+    <section class="event-story">
+      <h2>Event Story</h2>
+      <div class="markdown-content">{{ event.event_story|markdown }}</div>
+    </section>
+
+    <section class="location-info">
+      <h2>Location</h2>
+      <div class="markdown-content">{{ event.location_desc|markdown }}</div>
+      
+      {% if event.location_lat and event.location_lon %}
+      <div id="map" class="event-map" 
+           data-lat="{{ event.location_lat }}" 
+           data-lon="{{ event.location_lon }}"></div>
+      {% endif %}
+      
+      {% if event.public_transport_desc %}
+      <h3>Public Transport</h3>
+      <div class="markdown-content">{{ event.public_transport_desc|markdown }}</div>
+      {% endif %}
+    </section>
+
+    {% if event.fee %}
+    <section class="fee-info">
+      <h2>Participation Fee</h2>
+      <div class="fee-amount">{{ event.fee|floatformat:2 }} €</div>
+      {% if event.fee_desc %}
+      <div class="markdown-content">{{ event.fee_desc|markdown }}</div>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% if event.house_desc %}
+    <section class="house-info">
+      <h2>Accommodation</h2>
+      <div class="markdown-content">{{ event.house_desc|markdown }}</div>
+    </section>
+    {% endif %}
+
+    {% if program_days %}
+    <section class="event-program">
+      <h2>Event Program</h2>
+      {% for day in program_days %}
+      <div class="program-day">
+        <h3>{{ day.date|date:"l, F d" }}</h3>
+        {% if day.day_activity %}
+        <div class="day-activities">
+          <h4>Day Activities</h4>
+          <div class="markdown-content">{{ day.day_activity|markdown }}</div>
+        </div>
+        {% endif %}
+        {% if day.evening_activity %}
+        <div class="evening-activities">
+          <h4>Evening Activities</h4>
+          <div class="markdown-content">{{ day.evening_activity|markdown }}</div>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if gallery_images %}
+    <section class="event-gallery">
+      <h2>Photo Gallery</h2>
+      <div class="gallery-grid">
+        {% for image in gallery_images %}
+        <div class="gallery-item">
+          <img src="{{ image.image.url }}" alt="{{ image.caption|default:event.title }}">
+          {% if image.caption %}
+          <div class="image-caption">{{ image.caption }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if event.activity_ideas %}
+    <section class="activity-ideas">
+      <h2>Activity Ideas</h2>
+      <div class="markdown-content">{{ event.activity_ideas|markdown }}</div>
+    </section>
+    {% endif %}
+
+    {% if event.organizers %}
+    <section class="organizers">
+      <h2>Organizers</h2>
+      <div class="markdown-content">{{ event.organizers|markdown }}</div>
+    </section>
+    {% endif %}
+
+    <section class="registration">
+      <h2>Registration</h2>
+      <div class="markdown-content">{{ general_info.registration_description|markdown }}</div>
+      {% if event.registration_form %}
+      <div class="registration-button-container">
+        <a href="{{ event.registration_form }}" class="registration-button" target="_blank">Register Now</a>
+      </div>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}
