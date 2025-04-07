@@ -33,11 +33,11 @@ class Event(models.Model):
     slug = models.SlugField(unique=True)
     couchsurfing_link = models.URLField(blank=True, help_text="Link to couchsurfing event")
     main_image = models.ImageField(upload_to='events/images/')
-    event_story = models.TextField(help_text="Enter in markdown format")
+    event_story = models.TextField(help_text="Enter in markdown format", blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    town = models.CharField(max_length=200, blank=True)
-    location_name = models.CharField(max_length=200)
+    town_name = models.CharField(max_length=200)
+    house_name = models.CharField(max_length=200)
     location_desc = models.TextField(help_text="Enter in markdown format")
     location_lat = models.FloatField(null=True, blank=True)
     location_lon = models.FloatField(null=True, blank=True)
@@ -61,7 +61,7 @@ class GalleryImage(models.Model):
     order = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.event.title if self.event else "Event"} - {self.caption}"  #pylint: disable=no-member
+        return f"{self.event.title if self.event else 'Event'} - {self.caption}"  #pylint: disable=no-member
     
     class Meta:
         ordering = ['order']
@@ -74,6 +74,37 @@ class EventProgram(models.Model):
     evening_activity = models.TextField(help_text="Enter in markdown format", blank=True)
 
     def __str__(self):
-        return f"{self.event.title if self.event else "Event"} - {self.date}"  #pylint: disable=no-member
+        return f"{self.event.title if self.event else 'Event'} - {self.date}"  #pylint: disable=no-member
     class Meta:
         ordering = ['date']
+
+class AccommodationImage(models.Model):
+    """Model to store accommodation images related to an event"""
+    event = models.ForeignKey(Event, related_name='accommodation_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='events/accommodations/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.event.title if self.event else 'Event'} - Accommodation - {self.caption}"  #pylint: disable=no-member
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Accommodation Image"
+        verbose_name_plural = "Accommodation Images"
+
+
+class SurroundingsImage(models.Model):
+    """Model to store surroundings/location images related to an event"""
+    event = models.ForeignKey(Event, related_name='surroundings_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='events/surroundings/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.event.title if self.event else 'Event'} - Surroundings - {self.caption}"  #pylint: disable=no-member
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Surroundings Image" 
+        verbose_name_plural = "Surroundings Images"

@@ -77,17 +77,33 @@
     <footer class="bg-light text-center text-muted mt-5 py-4 border-top">
         <div class="container">
             {% block footer %}
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="d-flex flex-column flex-md-row justify-content-center">
+                        <a href="{% url 'about' %}" class="mb-2 mb-md-0">About this project</a> 
+                        <span class="d-none d-md-inline mx-3">•</span>
+                        <a href="{% url 'links' %}" class="mb-2 mb-md-0">Additional links</a>
+                        <span class="d-none d-md-inline mx-3">•</span>
+                        <span class="mb-2 mb-md-0">
+                            made with 
+                            <a href="https://www.djangoproject.com/" target="_blank" class="text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--bs-primary)" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                </svg>
+                            </a> 
+                            by <a href="https://github.com/michaburger" target="_blank">mikka</a> & Claude 3.7 Sonnet
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div class="row">
-                <div class="col-12 mb-2">
-                    <a href="{% url 'about' %}">About this project</a> 
-                    <span class="mx-4"></span>
-                    <a href="{% url 'links' %}">Additional links</a>
-                    <span class="mx-4"></span>
-                    made with <a href="https://www.djangoproject.com/" target="_blank" class="text-decoration-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--bs-primary)" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                        </svg>
-                    </a> by <a href="https://github.com/michaburger" target="_blank">mikka</a>
+                <div class="col-12">
+                    <p class="small">
+                        This event registration page is open source, feel free to adapt it and use it for your own event: 
+                        <a href="https://github.com/michaburger/friendsandmountains" target="_blank">
+                            <i class="bi bi-github"></i> friendsandmountains
+                        </a>
+                    </p>
                 </div>
             </div>
             {% endblock footer %}
