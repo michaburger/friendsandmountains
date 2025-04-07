@@ -47,6 +47,7 @@ class Event(models.Model):
     fee_desc = models.TextField(help_text="Enter in markdown format", blank=True)
     house_desc = models.TextField(help_text="Enter in markdown format", blank=True)
     registration_form = models.URLField(blank=True)
+    registration_state = models.CharField(max_length=200, blank=True, help_text="State of the registration form")
     activity_ideas = models.TextField(help_text="Enter in markdown format", blank=True)
     organizers = models.TextField(help_text="Enter in markdown format", blank=True)
 
@@ -92,7 +93,6 @@ class AccommodationImage(models.Model):
         ordering = ['order']
         verbose_name = "Accommodation Image"
         verbose_name_plural = "Accommodation Images"
-
 
 class SurroundingsImage(models.Model):
     """Model to store surroundings/location images related to an event"""

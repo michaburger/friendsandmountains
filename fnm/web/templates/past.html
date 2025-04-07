@@ -22,7 +22,6 @@
                                 <i class="bi bi-calendar3 me-2"></i>
                                 <div>
                                     <span class="small">{{ event.start_date|date:"M" }}</span>
-                                    <span class="fw-bold ms-1">{{ event.start_date|date:"d" }}</span>
                                     <span class="small ms-1">{{ event.start_date|date:"Y" }}</span>
                                 </div>
                             </div>
@@ -30,7 +29,9 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ event.title }}</h5>
-                        <p class="card-subtitle mb-2 text-muted">{{ event.location_name }}</p>
+                        <p class="card-subtitle mb-2 text-muted">
+                            <i class="bi bi-geo-alt me-1"></i> {{ event.town_name }}, {{ event.house_name }}
+                        </p>
                         <div class="card-text small">
                             {{ event.event_story|markdown|truncatewords_html:30 }}
                         </div>

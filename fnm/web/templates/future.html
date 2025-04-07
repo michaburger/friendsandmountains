@@ -1,34 +1,98 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
+{% load static %}
 {% block title %}Upcoming Events{% endblock %}
+
 {% block content %}
 <h1>Upcoming Events</h1>
 
-<div class="general-info">
+{% if general_info.general_description %}
+<div class="general-info mb-4">
     {{ general_info.general_description|markdown }}
 </div>
+{% endif %}
 
-<div class="events-grid">
+<div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
     {% for event in events %}
-        <div class="event-card future-event">
-            <img src="{{ event.main_image.url }}" alt="{{ event.title }}">
-            <h2>{{ event.title }}</h2>
-            <p>{{ event.start_date|date:"M d, Y" }} - {{ event.end_date|date:"M d, Y" }}</p>
-            <p>{{ event.location_name }}</p>
-            
-            {% if event.fee %}
-                <p class="event-fee">{{ event.fee|floatformat:2 }} €</p>
-            {% endif %}
-            
-            <a href="{% url 'event_detail' event.slug %}" class="event-link">View Details</a>
+        <div class="col">
+            <div class="card h-100 shadow-sm transition-card">
+                <div class="position-relative">
+                    <a href="{% url 'event_detail' event.slug %}" class="text-decoration-none">
+                        <img src="{{ event.main_image.url }}" class="card-img-top" alt="{{ event.title }}" style="height: 180px; object-fit: cover;">
+                    </a>
+                    <div class="position-absolute top-0 end-0 m-3 p-2 bg-primary text-white rounded">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-calendar3 me-2"></i>
+                            <div>
+                                <span class="small">{{ event.start_date|date:"M" }}</span>
+                                <span class="small ms-1">{{ event.start_date|date:"Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <div class="card-text">
+                        <div class="mb-2">
+                            <i class="bi bi-calendar-range me-2 text-muted"></i>
+                            <span class="text-muted">Start:</span> {{ event.start_date|date:"D, M d, Y - H:i" }}
+                        </div>
+                        <div class="mb-2">
+                            <i class="bi bi-calendar-check me-2 text-muted"></i>
+                            <span class="text-muted">End:</span> {{ event.end_date|date:"D, M d, Y - H:i" }}
+                        </div>
+                        <div class="mb-2">
+                            <i class="bi bi-geo-alt me-2 text-muted"></i>
+                            <span class="text-muted">Location:</span> {{ event.town_name }}
+                        </div>
+                        <div>
+                            <i class="bi bi-house me-2 text-muted"></i>
+                            <span class="text-muted">Venue:</span> {{ event.house_name }}
+                        </div>
+                        {% if event.fee %}
+                        <div class="mt-2">
+                            <i class="bi bi-currency-euro me-2 text-muted"></i>
+                            <span class="text-muted">Fee:</span> {{ event.fee|floatformat:2 }} €
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'event_detail' event.slug %}" class="btn btn-sm btn-outline-primary">
+                            View Details
+                        </a>
+                        {% if event.registration_form %}
+                        <a href="{{ event.registration_form }}" class="btn btn-sm btn-success" target="_blank">
+                            <i class="bi bi-pencil-square me-1"></i> Register Now
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     {% empty %}
-        <p>No upcoming events scheduled at this time.</p>
+        <div class="col-12">
+            <div class="alert alert-info">No upcoming events scheduled at this time.</div>
+        </div>
     {% endfor %}
 </div>
 
-<div class="registration-info">
+{% if general_info.registration_description %}
+<div class="registration-info mt-5">
     <h2>Registration Information</h2>
     {{ general_info.registration_description|markdown }}
 </div>
+{% endif %}
+
+<style>
+    /* Add hover effect for clickable cards */
+    .transition-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .transition-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+</style>
 {% endblock %}

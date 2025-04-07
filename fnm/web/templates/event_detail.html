@@ -84,11 +84,300 @@
     
   {% else %}
     <!-- Future Event Content -->
-    <div class="alert alert-success fw-bold text-center mb-4">
-      <i class="bi bi-calendar-check me-2"></i> This event is in the future
+    
+    <!-- Registration Status Box -->
+    {% if event.registration_form and "closed" in event.registration_state|lower %}
+      <!-- Registration Closed -->
+      <div class="alert alert-danger fw-bold text-center mb-4">
+        <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registration is closed" }}
+      </div>
+    {% elif event.registration_form %}
+      <!-- Registration Open -->
+      <div class="alert alert-success fw-bold text-center mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registration is open!" }}
+          </div>
+          <a href="{{ event.registration_form }}" target="_blank" class="btn btn-success">
+            <i class="bi bi-box-arrow-up-right me-1"></i> Register Now
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <!-- No Registration Yet -->
+      <div class="alert alert-warning fw-bold text-center mb-4">
+        <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registrations are not yet open" }}
+      </div>
+    {% endif %}
+    
+    <!-- General Event Description (Only shown for future events, now below registration box) -->
+    {% if general_info.general_description %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">About This Event</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ general_info.general_description|markdown }}
+      </div>
     </div>
     
-    <!-- Content for future events would go here -->
+    <!-- Static Event Images Gallery (Only shown for future events) -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <img src="{% static 'images/event1.jpg' %}" alt="Event" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Event')">
+          </div>
+          <div class="col-md-4">
+            <img src="{% static 'images/event2.jpg' %}" alt="Event" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Event')">
+          </div>
+          <div class="col-md-4">
+            <img src="{% static 'images/event3.jpg' %}" alt="Event" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Event')">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Event Description -->
+    {% if event.location_desc %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">About the Location</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ event.location_desc|markdown }}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- How to get there -->
+    {% if event.how_to_get_there %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">How to Get There</h2>
+      </div>
+      <div class="card-body">
+        <div class="markdown-content">
+          {{ event.how_to_get_there|markdown }}
+        </div>
+        
+        {% if event.location_lat and event.location_lon %}
+        <div class="mt-3 d-flex align-items-center">
+          <div class="me-2">
+            <strong>Coordinates:</strong> {{ event.location_lat }}, {{ event.location_lon }}
+          </div>
+          <button class="btn btn-sm btn-outline-primary ms-2" onclick="copyCoordinates('{{ event.location_lat }}, {{ event.location_lon }}')">
+            <i class="bi bi-clipboard"></i> Copy
+          </button>
+          <a href="https://www.google.com/maps/dir/?api=1&destination={{ event.location_lat }},{{ event.location_lon }}" class="btn btn-sm btn-outline-success ms-2" target="_blank">
+            <i class="bi bi-map"></i> Navigate
+          </a>
+        </div>
+        {% endif %}
+        
+        {% if event.googlemaps_embed %}
+        <div class="mt-3">
+          {{ event.googlemaps_embed|safe }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- House Description -->
+    {% if event.house_desc %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">About the Accommodation</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ event.house_desc|markdown }}
+      </div>
+    </div>
+    
+    <!-- Accommodation Images Gallery -->
+    {% if accommodation_images %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3">
+          {% for image in accommodation_images %}
+          <div class="col-md-4">
+            <img src="{{ image.image.url }}" 
+                 alt="{{ image.caption|default:'Accommodation' }}" 
+                 class="img-fluid rounded shadow-sm clickable-image" 
+                 data-bs-toggle="modal" 
+                 data-bs-target="#imageModal" 
+                 onclick="showImage('{{ image.image.url }}', '{{ image.caption}}')">
+            {% if image.caption %}
+            <div class="image-caption small text-center mt-1">{{ image.caption }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    
+    <!-- Registration Description -->
+    {% if general_info.registration_description %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Registration Information</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ general_info.registration_description|markdown }}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Fee Information -->
+    {% if event.fee or event.fee_desc %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Fee Information</h2>
+      </div>
+      <div class="card-body">
+        {% if event.fee %}
+        <div class="alert alert-info mb-3">
+          <strong>Participation fee:</strong> {{ event.fee|floatformat:2 }} CHF
+        </div>
+        {% endif %}
+        
+        {% if event.fee_desc %}
+        <div class="markdown-content">
+          {{ event.fee_desc|markdown }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Food Description -->
+    {% if general_info.food_description %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Food Information</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ general_info.food_description|markdown }}
+      </div>
+    </div>
+    
+    <!-- Cooking Images Gallery -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <img src="{% static 'images/cooking1.jpg' %}" alt="Cooking" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Cooking')">
+          </div>
+          <div class="col-md-4">
+            <img src="{% static 'images/cooking2.jpg' %}" alt="Cooking" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Cooking')">
+          </div>
+          <div class="col-md-4">
+            <img src="{% static 'images/cooking3.jpg' %}" alt="Cooking" class="img-fluid rounded shadow-sm clickable-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this.src, 'Cooking')">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Activity Ideas -->
+    {% if event.activity_ideas %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Activity Ideas</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ event.activity_ideas|markdown }}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Surroundings Images Gallery -->
+    {% if surroundings_images %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Surroundings</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          {% for image in surroundings_images %}
+          <div class="col-md-4">
+            <img src="{{ image.image.url }}" 
+                 alt="{{ image.caption|default:'Surroundings' }}" 
+                 class="img-fluid rounded shadow-sm clickable-image" 
+                 data-bs-toggle="modal" 
+                 data-bs-target="#imageModal" 
+                 onclick="showImage('{{ image.image.url }}', '{{ image.caption}}')">
+            {% if image.caption %}
+            <div class="image-caption small text-center mt-1">{{ image.caption }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Day Program -->
+    {% if program_days %}
+    <h2 class="h4 mb-3">Program suggestions</h2>
+    <div class="accordion mb-4" id="dayProgramAccordion">
+      {% for day in program_days %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+          <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+            {{ day.date|date:"l, F d" }}
+          </button>
+        </h2>
+        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#dayProgramAccordion">
+          <div class="accordion-body">
+            {% if day.day_activity %}
+            <div class="mb-3">
+              <h5><i class="bi bi-brightness-high me-2"></i> Day Activities</h5>
+              <div class="markdown-content">
+                {{ day.day_activity|markdown }}
+              </div>
+            </div>
+            {% endif %}
+            
+            {% if day.evening_activity %}
+            <div>
+              <h5><i class="bi bi-moon me-2"></i> Evening Activities</h5>
+              <div class="markdown-content">
+                {{ day.evening_activity|markdown }}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Organizers -->
+    {% if event.organizers %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h4 mb-0">Organizers</h2>
+      </div>
+      <div class="card-body markdown-content">
+        {{ event.organizers|markdown }}
+      </div>
+    </div>
+    {% endif %}
+    
+    <!-- Registration Button at Bottom if Open -->
+    {% if event.registration_form and "closed" not in event.registration_state|lower %}
+    <div class="text-center mb-4">
+      <a href="{{ event.registration_form }}" target="_blank" class="btn btn-lg btn-success">
+        <i class="bi bi-pencil-square me-2"></i> Register for this Event
+      </a>
+    </div>
+    {% endif %}
     
   {% endif %}
 </div>
@@ -108,7 +397,7 @@
   </div>
 </div>
 
-<!-- Add JavaScript for image modal -->
+<!-- Image viewing and utility JavaScript -->
 <script>
   function showImage(src, alt) {
     document.getElementById('modalImage').src = src;
@@ -116,7 +405,31 @@
     document.getElementById('imageModalLabel').textContent = alt;
   }
 
-  // Add cursor pointer to all clickable images
+  function copyCoordinates(coordinates) {
+    // Check if we're on mobile for sharing capability
+    if (navigator.share && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      navigator.share({
+        title: 'Event Location',
+        text: 'Here are the coordinates for the event: ' + coordinates,
+        url: 'https://www.google.com/maps/search/?api=1&query=' + coordinates
+      }).catch(err => {
+        console.error('Error sharing:', err);
+      });
+    } else {
+      // Desktop fallback - copy to clipboard
+      navigator.clipboard.writeText(coordinates).then(function() {
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+        setTimeout(function() {
+          button.innerHTML = originalText;
+        }, 2000);
+      }, function(err) {
+        console.error('Could not copy text: ', err);
+      });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('.clickable-image');
     images.forEach(img => {

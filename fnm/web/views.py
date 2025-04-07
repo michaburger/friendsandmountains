@@ -52,6 +52,8 @@ class EventDetailView(DetailView):
         context['general_info'] = GeneralEventInfo.load()
         # Load related data
         context['gallery_images'] = self.object.images.all()
+        context['accommodation_images'] = self.object.accommodation_images.all()
+        context['surroundings_images'] = self.object.surroundings_images.all()
         context['program_days'] = self.object.program_days.all()
         return context
 
