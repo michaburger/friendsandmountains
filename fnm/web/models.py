@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -53,6 +54,37 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+    
+class Registration(models.Model):
+    event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    address = models.TextField(max_length=200)
+    country = CountryField()
+    phone = models.CharField(max_length=20)
+    special_diets = models.TextField(max_length=200, blank=True, help_text="Dietary restrictions or allergies we should know about")
+    checkbox1 = models.BooleanField(default=False, help_text="I have read the entire event description and I agree to the format")
+    checkbox2 = models.BooleanField(default=False, help_text="I am ready to help out with cooking, keeping the house clean, and other tasks")
+    checkbox3 = models.BooleanField(default=False, help_text="I agree to be respectful and inclusive to all other participants")
+    checkbox4 = models.BooleanField(default=False, help_text="I notice that some pictures of the event might be published on this website after the event and I will talk to the organizers if I don't agree")
+    potluck = models.TextField(max_length=200, help_text="What do you plan to bring for the Potluck / International Dinner?")
+    activity_idea = models.TextField(max_length=200, blank=True, help_text="Do you have an activity idea that you would like to suggest for other participants that we should keep some time in the program for?")
+    other_comments = models.TextField(max_length=500, blank=True, help_text="Any other comments or questions?")
+    registered_at = models.DateTimeField(auto_now_add=True)
+    payment_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Pending'),
+            ('paid', 'Paid'),
+            ('failed', 'Failed'),
+        ],
+        default='pending'
+    )
+    stripe_payment_intent_id = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.event.title}"  #pylint: disable=no-member
 
 class GalleryImage(models.Model):
     """Model to store images related to an event"""
