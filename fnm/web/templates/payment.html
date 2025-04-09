@@ -21,7 +21,7 @@
                     <p class="card-text">Name: {{ display_name }}</p>
                     <p class="card-text">Event: {{ event.title }}</p>
                     {% if registration.bring_a_friend %}
-                        <p class="card-text"><strong>Amount to pay: CHF {{ registration.final_price|mul:2 }}</strong></p>
+                        <p class="card-text"><strong>Amount to pay: CHF {{ registration.final_price }} (2 persons)</strong></p>
                     {% else %}
                         <p class="card-text"><strong>Amount to pay: CHF {{ registration.final_price }}</strong></p>
                     {% endif %}

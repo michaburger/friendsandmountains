@@ -147,14 +147,21 @@ class Registration(models.Model):
             self.original_price = self.event.fee  #pylint: disable=no-member
             self.final_price = self.event.fee  #pylint: disable=no-member
         
-        # Apply coupon if provided and valid
+        # Double the price if bringing a friend
+        if self.bring_a_friend:
+            self.final_price = self.original_price * 2
+        else:
+            # Make sure price is reset if bring_a_friend is toggled off
+            self.final_price = self.original_price
+        
+        # Apply coupon if provided and valid (this applies after the friend calculation)
         if self.coupon_code and not self.coupon:
             try:
                 coupon = Coupon.objects.get(code=self.coupon_code, is_active=True)  #pylint: disable=no-member
                 if coupon.is_valid():
                     self.coupon = coupon
-                    if self.original_price:
-                        self.final_price = max(0, self.original_price - coupon.discount_amount)
+                    if self.final_price:
+                        self.final_price = max(0, self.final_price - coupon.discount_amount)
             except Coupon.DoesNotExist:  #pylint: disable=no-member
                 # Invalid coupon code, ignore it
                 pass
