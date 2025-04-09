@@ -18,9 +18,13 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Registration Details</h5>
-                    <p class="card-text">Name: {{ registration.first_name }} {{ registration.last_name }}</p>
+                    <p class="card-text">Name: {{ display_name }}</p>
                     <p class="card-text">Event: {{ event.title }}</p>
-                    <p class="card-text"><strong>Amount to pay: CHF {{ registration.final_price }}</strong></p>
+                    {% if registration.bring_a_friend %}
+                        <p class="card-text"><strong>Amount to pay: CHF {{ amount|divisibleby:100 }} (includes friend)</strong></p>
+                    {% else %}
+                        <p class="card-text"><strong>Amount to pay: CHF {{ registration.final_price }}</strong></p>
+                    {% endif %}
                 </div>
             </div>
         </div>
