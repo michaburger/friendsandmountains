@@ -206,11 +206,13 @@ def add_email_to_sender_list(email, first_name, last_name, event=None):
     1. The event-specific list if provided
     2. The general newsletter list
     """
+    import logging
+    logger = logging.getLogger(__name__)
     success = True
     
     # Helper function to add to a specific list
     def add_to_list(list_id):
-        url = f"{settings.SENDER_BASE_URL}subscribers"
+        url = f"https://api.sender.net/v2/subscribers"  # Added missing slash
         
         data = {
             "list_id": list_id,
@@ -225,20 +227,33 @@ def add_email_to_sender_list(email, first_name, last_name, event=None):
         }
         
         try:
+            logger.info(f"Sending request to Sender.net: {url} with list_id: {list_id}")
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
+            logger.info(f"Successfully added email {email} to list {list_id}")
             return True
-        except requests.exceptions.RequestException:
-            # Log the error
+        except requests.exceptions.RequestException as e:
+            # Log detailed error information
+            logger.error(f"Failed to add email {email} to list {list_id}: {str(e)}")
+            if hasattr(e, 'response') and e.response:
+                logger.error(f"Response status: {e.response.status_code}")
+                logger.error(f"Response content: {e.response.text}")
             return False
     
     # Add to event-specific list if available
     if event and event.sender_list_id:
+        logger.info(f"Adding email to event-specific list: {event.sender_list_id}")
         event_success = add_to_list(event.sender_list_id)
         success = success and event_success
+    else:
+        logger.info("No event-specific list ID available")
     
     # Always add to the general newsletter list
-    newsletter_success = add_to_list(settings.SENDER_LIST_ID)
-    success = success and newsletter_success
-    
+    if settings.SENDER_LIST_ID:
+        logger.info(f"Adding email to general newsletter list: {settings.SENDER_LIST_ID}")
+        newsletter_success = add_to_list(settings.SENDER_LIST_ID)
+        success = success and newsletter_success
+    else:
+        logger.warning("SENDER_LIST_ID not configured in settings")
+        
     return success
