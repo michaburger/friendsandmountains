@@ -23,12 +23,12 @@ def payment_page(request, registration_id):
 
     # Calculate final price based on friend status
     final_price = registration.final_price
-    if registration.bringing_friend:
+    if registration.bring_a_friend:  # Changed from bringing_friend to bring_a_friend
         final_price = final_price * 2
 
     # Prepare name display for checkout page
     display_name = registration.first_name + " " + registration.last_name
-    if registration.bringing_friend:
+    if registration.bring_a_friend:  # Changed from bringing_friend to bring_a_friend
         # If friend fields exist, use them; otherwise use generic friend label
         if hasattr(registration, 'friend_first_name') and hasattr(registration, 'friend_last_name'):
             friend_name = registration.friend_first_name + " " + registration.friend_last_name
@@ -51,12 +51,12 @@ def create_payment_intent(request, registration_id):
 
     # Calculate final price based on friend status
     final_price = registration.final_price
-    if registration.bringing_friend:
+    if registration.bring_a_friend:  # Changed from bringing_friend to bring_a_friend
         final_price = final_price * 2
 
     # Prepare customer name for payment description
     customer_name = f"{registration.first_name} {registration.last_name}"
-    if registration.bringing_friend:
+    if registration.bring_a_friend:  # Changed from bringing_friend to bring_a_friend
         if hasattr(registration, 'friend_first_name') and hasattr(registration, 'friend_last_name'):
             friend_name = f"{registration.friend_first_name} {registration.friend_last_name}"
             customer_display = f"{customer_name} + {friend_name}"
@@ -77,7 +77,7 @@ def create_payment_intent(request, registration_id):
             'customer_email': registration.email,
             'customer_name': customer_display,
             'event_title': registration.event.title,
-            'bringing_friend': str(registration.bringing_friend)
+            'bringing_friend': str(registration.bring_a_friend)  # Changed from bringing_friend to bring_a_friend
         }
     )
 
