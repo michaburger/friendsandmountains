@@ -179,7 +179,16 @@ cython_debug/
 __pycache__/
 local_settings.py
 fnm/db.sqlite3
+fnm/db.sqlite3-journal
+
+# Media and static files
+fnm/media/
 fnm/media
+media/
+*/media/
+**/media/
+fnm/static/collected/
+collected-static/
 
 # Django Secret Key and environment variables
 .env
