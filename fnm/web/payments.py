@@ -27,10 +27,9 @@ def payment_page(request, registration_id):
     # Prepare name display for checkout page
     display_name = registration.first_name + " " + registration.last_name
     if registration.bring_a_friend:
-        # If friend fields exist, use them; otherwise use generic friend label
-        if hasattr(registration, 'friend_first_name') and hasattr(registration, 'friend_last_name'):
-            friend_name = registration.friend_first_name + " " + registration.friend_last_name
-            display_name = f"{display_name} + {friend_name}"
+        # Use the friend_name field if it has a value
+        if registration.friend_name:
+            display_name = f"{display_name} + {registration.friend_name}"
         else:
             display_name = f"{display_name} + friend"
 
@@ -53,9 +52,9 @@ def create_payment_intent(request, registration_id):
     # Prepare customer name for payment description
     customer_name = f"{registration.first_name} {registration.last_name}"
     if registration.bring_a_friend:
-        if hasattr(registration, 'friend_first_name') and hasattr(registration, 'friend_last_name'):
-            friend_name = f"{registration.friend_first_name} {registration.friend_last_name}"
-            customer_display = f"{customer_name} + {friend_name}"
+        # Use the friend_name field if it has a value
+        if registration.friend_name:
+            customer_display = f"{customer_name} + {registration.friend_name}"
         else:
             customer_display = f"{customer_name} + friend"
     else:
@@ -87,6 +86,11 @@ def create_payment_intent(request, registration_id):
 
 def payment_success(request, registration_id):
     """Handle successful payment"""
+    # Close any stale database connections
+    from django.db import connections
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
+    
     registration = get_object_or_404(Registration, id=registration_id)
 
     # Get Stripe payment parameters
@@ -121,6 +125,11 @@ def payment_success(request, registration_id):
 
 def payment_cancel(request, registration_id):
     """Handle canceled payment"""
+    # Close any stale database connections
+    from django.db import connections
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
+        
     registration = get_object_or_404(Registration, id=registration_id)
 
     return render(request, 'payment_cancel.html', {'registration': registration})
