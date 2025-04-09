@@ -63,16 +63,20 @@ def registration(request):
     return render(request, 'registration.html')
 
 def event_registration(request, slug):
+    """Handle event registration form submission"""
     event = get_object_or_404(Event, slug=slug)
     
-    if request.method == 'POST' and event.registration_state == 'open':
+    if request.method == 'POST':
         form = RegistrationForm(request.POST)
+        
         if form.is_valid():
             registration = form.save(commit=False)
             registration.event = event
+            # Add any other necessary fields
             registration.save()
-            messages.success(request, "Thank you for registering! We'll be in touch soon.")
-            return redirect('event_detail', slug=event.slug)
+            
+            # Redirect to payment page
+            return redirect('payment_page', registration_id=registration.id)
     else:
         form = RegistrationForm()
     

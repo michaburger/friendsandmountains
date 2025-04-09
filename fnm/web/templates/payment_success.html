@@ -1,0 +1,12 @@
+{% extends "web/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success">
+        <h1>Payment Successful!</h1>
+        <p>Thank you for completing your registration for {{ registration.event.title }}.</p>
+        <p>A confirmation email has been sent to {{ registration.email }}.</p>
+        <p>We're looking forward to seeing you at the event!</p>
+    </div>
+    <a href="/" class="btn btn-primary">Return to Homepage</a>
+</div>
+{% endblock %}

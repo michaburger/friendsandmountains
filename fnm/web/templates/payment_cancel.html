@@ -1,0 +1,12 @@
+{% extends "web/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-warning">
+        <h1>Payment Canceled</h1>
+        <p>Your payment for {{ registration.event.title }} has been canceled.</p>
+        <p>If you experienced any issues, please contact us.</p>
+    </div>
+    <a href="/payment/{{ registration.id }}/" class="btn btn-primary">Try Again</a>
+    <a href="/" class="btn btn-secondary">Return to Homepage</a>
+</div>
+{% endblock %}

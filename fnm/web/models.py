@@ -61,6 +61,11 @@ class Event(models.Model):
     )
     activity_ideas = models.TextField(help_text="Enter in markdown format", blank=True)
     organizers = models.TextField(help_text="Enter in markdown format", blank=True)
+    sender_list_id = models.CharField(
+        max_length=100, 
+        blank=True, 
+        help_text="Sender.net list ID specific to this event"
+    )
 
     def __str__(self):
         return f"{self.title}"

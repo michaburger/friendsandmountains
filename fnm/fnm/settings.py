@@ -139,3 +139,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
+
+# Sender.net Settings
+SENDER_API_KEY = config('SENDER_API_KEY', default='')
+SENDER_BASE_URL = config('SENDER_BASE_URL', default='https://api.sender.net/v1')
+SENDER_LIST_ID = config('SENDER_LIST_ID', default='')
