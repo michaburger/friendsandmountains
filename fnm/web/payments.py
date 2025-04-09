@@ -133,6 +133,16 @@ def payment_cancel(request, registration_id):
 @require_POST
 def stripe_webhook(request):
     """Handle Stripe webhook events"""
+    import logging
+    from django.db import connections
+    
+    logger = logging.getLogger(__name__)
+    logger.info("Webhook received")
+    
+    # Close any stale database connections
+    for conn in connections.all():
+        conn.close_if_unusable_or_obsolete()
+    
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
 
@@ -140,9 +150,12 @@ def stripe_webhook(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except ValueError:
+        logger.info(f"Webhook event type: {event['type']}")
+    except ValueError as e:
+        logger.error(f"Invalid payload: {str(e)}")
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
+    except stripe.error.SignatureVerificationError as e:
+        logger.error(f"Invalid signature: {str(e)}")
         return HttpResponse(status=400)
 
     # Handle the event
@@ -150,24 +163,34 @@ def stripe_webhook(request):
         payment_intent = event['data']['object']
         registration_id = payment_intent.metadata.get('registration_id')
         
+        logger.info(f"Payment succeeded for registration: {registration_id}")
+        
         if registration_id:
             try:
-                registration = Registration.objects.get(id=registration_id)  #pylint: disable=no-member
+                # Get a fresh DB connection
+                from django.db import connection
+                connection.ensure_connection()
+                
+                registration = Registration.objects.get(id=registration_id)  # pylint: disable=no-member
                 registration.payment_status = 'paid'
-                registration.payment_date = timezone.now()  # Add a payment date field if you don't have one
+                registration.payment_date = timezone.now()
                 registration.save()
                 
                 # Add email to Sender.net lists
-                add_email_to_sender_list(
+                sender_result = add_email_to_sender_list(
                     email=registration.email,
                     first_name=registration.first_name,
                     last_name=registration.last_name,
-                    event=registration.event  # Pass the event
+                    event=registration.event
                 )
+                logger.info(f"Email added to Sender list result: {sender_result}")
                 
-            except Registration.DoesNotExist:  #pylint: disable=no-member
-                # Log error or handle missing registration
-                pass
+            except Registration.DoesNotExist:  # pylint: disable=no-member
+                logger.error(f"Registration {registration_id} not found")
+                return HttpResponse(status=404)
+            except Exception as e:
+                logger.error(f"Error processing webhook: {str(e)}")
+                return HttpResponse(status=500)
     
     return HttpResponse(status=200)
 
