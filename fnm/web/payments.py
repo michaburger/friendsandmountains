@@ -217,8 +217,8 @@ def add_email_to_sender_list(email, first_name, last_name, event=None):
         data = {
             "list_id": list_id,
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
+            "firstname": first_name,
+            "lastname": last_name,
         }
         
         headers = {
