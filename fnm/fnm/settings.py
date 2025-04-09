@@ -101,11 +101,10 @@ else:
         'default': dj_database_url.config(conn_max_age=600)
     }
     
-    # Add MySQL strict mode for production MySQL database
+    # SQL strict mode
     if DATABASES['default']['ENGINE'] == 'django.db.backends.mysql':
-        DATABASES['default']['OPTIONS'] = {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'",
-        }
+        DATABASES['default'].setdefault('OPTIONS', {})
+        DATABASES['default']['OPTIONS']['init_command'] = "SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'"
     
     # Prevent makemigrations in production
     def prevent_makemigrations():
