@@ -93,7 +93,7 @@
                             
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-success btn-lg w-100">
-                                    <i class="bi bi-check-circle me-2"></i>Submit Registration
+                                    <i class="bi bi-check-circle me-2"></i>Submit and Pay
                                 </button>
                             </div>
                         </form>
@@ -117,7 +117,10 @@
                         {% if event.fee %}
                         <div class="row mb-3">
                             <div class="col-md-4 fw-bold">Fee:</div>
-                            <div class="col-md-8">{{ event.fee }} CHF</div>
+                            <div class="col-md-8">
+                                <span id="standard-fee">{{ event.fee }} CHF</span>
+                                <span id="friend-fee" style="display:none;">{{ event.fee|mul:2 }} CHF (includes friend)</span>
+                            </div>
                         </div>
                         {% endif %}
                     </div>

@@ -7,9 +7,14 @@ Event registration website built with django
 ## Features
 - Display past and future events
 - Event with pre-defined data model, matching our event format
+- Use markdown format for the description
+- Manage all events in the django admin panel
+- Add daily program to the event
 - Add multiple photos as a gallery to each event
-- (Todo) Event registration form, manage your participants in the django admin panel
-- (Todo) Payment integration with stripe
+- Event registration form: Register yourself and max. 1 friend
+- Payment integration with stripe
+- Mailing automation integration with sender.net
+- XLS and CSV download of registered participants from the django admin panel
 
 ## How to use for your own events
 I built this website to make event organization for mountain weekends, birthdays etc easier.  
