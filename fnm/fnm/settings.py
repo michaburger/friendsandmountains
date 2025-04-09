@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "michaburger.pythonanywhere.com", "friends-and-mountains.ch"]
 
 
 # Application definition
@@ -79,25 +80,11 @@ WSGI_APPLICATION = 'fnm.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST', default='localhost'),
-            'PORT': config('DB_PORT', default='3306'),
-        }
-    }
-
+DATABASES = {
+    'default': dj_database_url.config(
+        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
