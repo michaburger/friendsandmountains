@@ -25,7 +25,6 @@ For a complete step-by-step guide, check out the official PythonAnywhere documen
 
 Don't forget about these steps:
 - Export staticfiles: `python manage.py collectstatic`
-- Create database migrations: `python manage.py makemigrations`
 - Apply database migrations: `python manage.py migrate`
 - Create an `.env` file on your server (see `.env.example` for reference) and add your secrets there
 - If using Stripe, make sure to update your API keys in the `.env` file
