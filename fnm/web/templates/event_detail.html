@@ -86,27 +86,27 @@
     <!-- Future Event Content -->
     
     <!-- Registration Status Box -->
-    {% if event.registration_form and "closed" in event.registration_state|lower %}
+    {% if event.registration_state == 'closed' %}
       <!-- Registration Closed -->
       <div class="alert alert-danger fw-bold text-center mb-4">
-        <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registration is closed" }}
+        <i class="bi bi-pencil-square me-2"></i> Registrations closed
       </div>
-    {% elif event.registration_form %}
+    {% elif event.registration_state == 'open' %}
       <!-- Registration Open -->
       <div class="alert alert-success fw-bold text-center mb-4">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registration is open!" }}
+            <i class="bi bi-pencil-square me-2"></i> Registrations are open!
           </div>
-          <a href="{{ event.registration_form }}" target="_blank" class="btn btn-success">
+          <a href="{% url 'event_registration' event.slug %}" class="btn btn-success">
             <i class="bi bi-box-arrow-up-right me-1"></i> Register Now
           </a>
         </div>
       </div>
     {% else %}
-      <!-- No Registration Yet -->
+      <!-- Registration Soon (Default) -->
       <div class="alert alert-warning fw-bold text-center mb-4">
-        <i class="bi bi-pencil-square me-2"></i> {{ event.registration_state|default:"Registrations are not yet open" }}
+        <i class="bi bi-pencil-square me-2"></i> Registrations opening soon
       </div>
     {% endif %}
     
@@ -371,9 +371,9 @@
     {% endif %}
     
     <!-- Registration Button at Bottom if Open -->
-    {% if event.registration_form and "closed" not in event.registration_state|lower %}
+    {% if event.registration_state == 'open' %}
     <div class="text-center mb-4">
-      <a href="{{ event.registration_form }}" target="_blank" class="btn btn-lg btn-success">
+      <a href="{% url 'event_registration' event.slug %}" class="btn btn-lg btn-success">
         <i class="bi bi-pencil-square me-2"></i> Register for this Event
       </a>
     </div>

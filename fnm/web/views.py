@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.views.generic import DetailView, ListView
 from django.utils import timezone
-from .models import Event, GeneralEventInfo
+from .models import Event, GeneralEventInfo, Registration
+from .forms import RegistrationForm
 
 # Keep your existing simple views
 def welcome(request):
@@ -59,3 +61,22 @@ class EventDetailView(DetailView):
 
 def registration(request):
     return render(request, 'registration.html')
+
+def event_registration(request, slug):
+    event = get_object_or_404(Event, slug=slug)
+    
+    if request.method == 'POST' and event.registration_state == 'open':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            registration = form.save(commit=False)
+            registration.event = event
+            registration.save()
+            messages.success(request, "Thank you for registering! We'll be in touch soon.")
+            return redirect('event_detail', slug=event.slug)
+    else:
+        form = RegistrationForm()
+    
+    return render(request, 'event_registration.html', {
+        'event': event,
+        'form': form
+    })

@@ -9,4 +9,5 @@ urlpatterns = [
     path('future/', views.FutureEventsView.as_view(), name='future'),
     path('registration/', views.registration, name='registration'),
     path('events/<slug:slug>/', views.EventDetailView.as_view(), name='event_detail'),
+    path('events/<slug:slug>/register/', views.event_registration, name='event_registration'),
 ]
