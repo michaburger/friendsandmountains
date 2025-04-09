@@ -27,7 +27,7 @@ def payment_page(request, registration_id):
         'amount': int(registration.final_price * 100),  # Convert to cents for Stripe
         'event': registration.event,
     }
-    return render(request, 'web/payment.html', context)
+    return render(request, 'payment.html', context)
 
 def create_payment_intent(request, registration_id):
     """Create Stripe PaymentIntent for a registration"""
@@ -61,13 +61,13 @@ def payment_success(request, registration_id):
     registration = get_object_or_404(Registration, id=registration_id)
     
     # This view would be shown after successful payment
-    return render(request, 'web/payment_success.html', {'registration': registration})
+    return render(request, 'payment_success.html', {'registration': registration})
 
 def payment_cancel(request, registration_id):
     """Handle canceled payment"""
     registration = get_object_or_404(Registration, id=registration_id)
     
-    return render(request, 'web/payment_cancel.html', {'registration': registration})
+    return render(request, 'payment_cancel.html', {'registration': registration})
 
 @csrf_exempt
 @require_POST
