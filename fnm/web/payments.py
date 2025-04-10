@@ -131,6 +131,11 @@ def payment_cancel(request, registration_id):
         conn.close_if_unusable_or_obsolete()
         
     registration = get_object_or_404(Registration, id=registration_id)
+    
+    # Update payment status to cancelled
+    if registration.payment_status != 'paid':
+        registration.payment_status = 'cancelled'
+        registration.save()
 
     return render(request, 'payment_cancel.html', {'registration': registration})
 

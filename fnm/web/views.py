@@ -57,6 +57,37 @@ class EventDetailView(DetailView):
         context['accommodation_images'] = self.object.accommodation_images.all()
         context['surroundings_images'] = self.object.surroundings_images.all()
         context['program_days'] = self.object.program_days.all()
+        
+        # Add participants data for future events
+        if self.object.end_date >= timezone.now():
+            # Get paid registrations for this event
+            paid_registrations = self.object.registrations.filter(payment_status='paid')
+            
+            participants = []
+            participant_count = 0
+            
+            # Process each registration
+            for registration in paid_registrations:
+                participant_count += 1
+                participant_info = {
+                    'name': registration.first_name,
+                    'country': registration.country
+                }
+                participants.append(participant_info)
+                
+                # If bringing a friend, add them as well
+                if registration.bring_a_friend and registration.friend_name:
+                    participant_count += 1
+                    friend_info = {
+                        'name': registration.friend_name,
+                        'country': registration.country,  # Friend has same country as registrant
+                        'is_friend': True
+                    }
+                    participants.append(friend_info)
+            
+            context['event_participants'] = participants
+            context['participant_count'] = participant_count
+            
         return context
 
 def registration(request):

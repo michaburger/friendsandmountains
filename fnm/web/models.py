@@ -136,6 +136,7 @@ class Registration(models.Model):
             ('pending', 'Pending'),
             ('paid', 'Paid'),
             ('failed', 'Failed'),
+            ('cancelled', 'Cancelled'),
         ],
         default='pending'
     )
