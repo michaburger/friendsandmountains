@@ -205,60 +205,69 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 def add_email_to_sender_list(email, first_name, last_name, event=None):
-    """Add email to Sender.net mailing lists
+    """Add email to Sender.net mailing groups
     
     Adds the email to:
-    1. The event-specific list if provided
-    2. The general newsletter list
+    1. The event-specific group if provided
+    2. The general newsletter group
     """
     import logging
     logger = logging.getLogger(__name__)
     success = True
     
-    # Helper function to add to a specific list
-    def add_to_list(list_id):
-        url = f"https://api.sender.net/v2/subscribers"  # Added missing slash
+    # Helper function to add to specific groups
+    def add_to_groups(groups):
+        url = "https://api.sender.net/v2/subscribers"
         
         data = {
-            "list_id": list_id,
             "email": email,
             "firstname": first_name,
             "lastname": last_name,
+            "groups": groups,
+            "trigger_automation": True
         }
         
         headers = {
             "Authorization": f"Bearer {settings.SENDER_API_KEY}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Accept": "application/json"
         }
         
         try:
-            logger.info(f"Sending request to Sender.net: {url} with list_id: {list_id}")
+            logger.info(f"Sending request to Sender.net: {url} with groups: {groups}")
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
-            logger.info(f"Successfully added email {email} to list {list_id}")
+            logger.info(f"Successfully added email {email} to groups {groups}")
             return True
         except requests.exceptions.RequestException as e:
             # Log detailed error information
-            logger.error(f"Failed to add email {email} to list {list_id}: {str(e)}")
+            logger.error(f"Failed to add email {email} to groups {groups}: {str(e)}")
             if hasattr(e, 'response') and e.response:
                 logger.error(f"Response status: {e.response.status_code}")
                 logger.error(f"Response content: {e.response.text}")
             return False
     
-    # Add to event-specific list if available
-    if event and event.sender_list_id:
-        logger.info(f"Adding email to event-specific list: {event.sender_list_id}")
-        event_success = add_to_list(event.sender_list_id)
-        success = success and event_success
-    else:
-        logger.info("No event-specific list ID available")
+    groups_to_add = []
     
-    # Always add to the general newsletter list
-    if settings.SENDER_LIST_ID:
-        logger.info(f"Adding email to general newsletter list: {settings.SENDER_LIST_ID}")
-        newsletter_success = add_to_list(settings.SENDER_LIST_ID)
-        success = success and newsletter_success
+    if event and hasattr(event, 'sender_list_id') and event.sender_list_id:
+        # For backward compatibility with existing list_id fields
+        logger.info(f"Using legacy event-specific list as group: {event.sender_list_id}")
+        groups_to_add.append(event.sender_list_id)
     else:
-        logger.warning("SENDER_LIST_ID not configured in settings")
+        logger.info("No event-specific group ID available")
+    
+    # Add general newsletter group
+    if hasattr(settings, 'SENDER_LIST_ID') and settings.SENDER_LIST_ID:
+        # For backward compatibility with existing list_id settings
+        logger.info(f"Using legacy newsletter list as group: {settings.SENDER_LIST_ID}")
+        groups_to_add.append(settings.SENDER_LIST_ID)
+    else:
+        logger.warning("No Sender group or list ID configured in settings")
+    
+    if groups_to_add:
+        # Send one request with all groups
+        success = add_to_groups(groups_to_add)
+    else:
+        logger.warning("No groups to add, skipping Sender API call")
         
     return success
