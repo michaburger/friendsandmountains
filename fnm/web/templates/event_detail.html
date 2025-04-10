@@ -8,7 +8,7 @@
 {% endblock header_image_src %}
 
 {% block sidebar %}
-  {% if event.end_date|date:"Y-m-d" >= today and participant_count is not None %}
+  {% if is_active_event and participant_count is not None %}
     <!-- Registrations card for desktop sidebar -->
     <div class="card mb-4 shadow-sm">
       <div class="card-header bg-light">
@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block mobile_sidebar %}
-  {% if event.end_date|date:"Y-m-d" >= today and participant_count is not None %}
+  {% if is_active_event and participant_count is not None %}
     <!-- Mobile registrations card -->
     <div class="card mb-4 shadow-sm">
       <div class="card-header bg-light">

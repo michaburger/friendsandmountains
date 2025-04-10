@@ -58,8 +58,15 @@ class EventDetailView(DetailView):
         context['surroundings_images'] = self.object.surroundings_images.all()
         context['program_days'] = self.object.program_days.all()
         
+        # Add today's date for comparison
+        context['today'] = timezone.now().date()
+        
+        # Check if event is in the future or ongoing
+        is_active_event = self.object.end_date.date() >= timezone.now().date()
+        context['is_active_event'] = is_active_event
+        
         # Add participants data for future events
-        if self.object.end_date >= timezone.now():
+        if is_active_event:
             # Get paid registrations for this event
             paid_registrations = self.object.registrations.filter(payment_status='paid')
             
