@@ -49,6 +49,7 @@ class Event(models.Model):
     fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     fee_desc = models.TextField(help_text="Enter in markdown format", blank=True)
     house_desc = models.TextField(help_text="Enter in markdown format", blank=True)
+    max_participants = models.IntegerField(default=0, help_text="Maximum number of participants (0 means no limit)")
     registration_state = models.CharField(
         max_length=30, 
         choices=[

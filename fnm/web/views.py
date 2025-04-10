@@ -68,25 +68,23 @@ class EventDetailView(DetailView):
             
             # Process each registration
             for registration in paid_registrations:
-                participant_count += 1
                 participant_info = {
                     'name': registration.first_name,
-                    'country': registration.country
+                    'country': registration.country,
+                    'friend_name': registration.friend_name if registration.bring_a_friend else None
                 }
-                participants.append(participant_info)
                 
-                # If bringing a friend, add them as well
+                # Count participants (person + friend if applicable)
                 if registration.bring_a_friend and registration.friend_name:
+                    participant_count += 2
+                else:
                     participant_count += 1
-                    friend_info = {
-                        'name': registration.friend_name,
-                        'country': registration.country,  # Friend has same country as registrant
-                        'is_friend': True
-                    }
-                    participants.append(friend_info)
+                    
+                participants.append(participant_info)
             
             context['event_participants'] = participants
             context['participant_count'] = participant_count
+            context['max_participants'] = self.object.max_participants
             
         return context
 

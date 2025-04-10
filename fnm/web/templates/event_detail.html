@@ -385,65 +385,87 @@
       
       <!-- Sidebar column -->
       <div class="col-lg-4">
-        <!-- Participants card for desktop sidebar -->
-        {% if event_participants %}
+        <!-- Registrations card for desktop sidebar -->
+        {% if event.end_date|date:"Y-m-d" >= today %}
         <div class="card mb-4 shadow-sm d-none d-lg-block">
           <div class="card-header bg-light">
             <h2 class="h5 mb-0">
               <i class="bi bi-people-fill me-2"></i>
-              Participants ({{ participant_count }})
+              Registrations 
+              {% if participant_count > 0 %}
+                {% if max_participants > 0 %}
+                  ({{ participant_count }}/{{ max_participants }})
+                {% else %}
+                  ({{ participant_count }})
+                {% endif %}
+              {% endif %}
             </h2>
           </div>
           <div class="card-body">
-            <ul class="list-group list-group-flush">
-              {% for participant in event_participants %}
-              <li class="list-group-item d-flex align-items-center px-0">
-                {% if participant.country %}
-                <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
-                {% endif %}
-                {{ participant.name }}
-                {% if participant.is_friend %}
-                <small class="text-muted ms-1">(friend)</small>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
+            {% if event_participants %}
+              <ul class="list-group list-group-flush">
+                {% for participant in event_participants %}
+                <li class="list-group-item d-flex align-items-center px-0">
+                  {% if participant.country %}
+                  <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
+                  {% endif %}
+                  {{ participant.name }}
+                  {% if participant.friend_name %}
+                  <span class="ms-1">+ {{ participant.friend_name }}</span>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-center mb-0">No registrations yet</p>
+            {% endif %}
           </div>
         </div>
         {% endif %}
       </div>
     </div>
   
-    <!-- Mobile participants card - visible only on mobile -->
-    {% if event_participants %}
+    <!-- Mobile registrations card - visible only on mobile -->
+    {% if event.end_date|date:"Y-m-d" >= today %}
     <div class="card mb-4 shadow-sm d-lg-none">
       <div class="card-header bg-light">
         <h2 class="h5 mb-0">
           <i class="bi bi-people-fill me-2"></i>
-          Participants ({{ participant_count }})
+          Registrations
+          {% if participant_count > 0 %}
+            {% if max_participants > 0 %}
+              ({{ participant_count }}/{{ max_participants }})
+            {% else %}
+              ({{ participant_count }})
+            {% endif %}
+          {% endif %}
         </h2>
       </div>
       <div class="card-body">
-        <ul class="list-group list-group-flush">
-          {% for participant in event_participants %}
-          <li class="list-group-item d-flex align-items-center px-0">
-            {% if participant.country %}
-            <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
-            {% endif %}
-            {{ participant.name }}
-            {% if participant.is_friend %}
-            <small class="text-muted ms-1">(friend)</small>
-            {% endif %}
-          </li>
-          {% endfor %}
-        </ul>
+        {% if event_participants %}
+          <ul class="list-group list-group-flush">
+            {% for participant in event_participants %}
+            <li class="list-group-item d-flex align-items-center px-0">
+              {% if participant.country %}
+              <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
+              {% endif %}
+              {{ participant.name }}
+              {% if participant.friend_name %}
+              <span class="ms-1">+ {{ participant.friend_name }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-center mb-0">No registrations yet</p>
+        {% endif %}
       </div>
     </div>
     {% endif %}
     
-    <!-- Registration Button at Bottom if Open -->
+    <!-- Registration Button at Bottom if Open - ONLY FOR MOBILE -->
     {% if event.registration_state == 'open' %}
-    <div class="text-center mb-4">
+    <div class="text-center mb-4 d-lg-none">
       <a href="{% url 'event_registration' event.slug %}" class="btn btn-lg btn-success">
         <i class="bi bi-pencil-square me-2"></i> Register for this Event
       </a>
