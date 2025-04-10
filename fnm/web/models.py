@@ -46,6 +46,7 @@ class Event(models.Model):
     location_lon = models.FloatField(null=True, blank=True)
     googlemaps_embed = models.TextField(blank=True, help_text="Google Maps embed code")
     how_to_get_there = models.TextField(help_text="Enter in markdown format", blank=True)
+    what_to_bring = models.TextField(help_text="Enter in markdown format", blank=True)
     fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     fee_desc = models.TextField(help_text="Enter in markdown format", blank=True)
     house_desc = models.TextField(help_text="Enter in markdown format", blank=True)
@@ -91,8 +92,8 @@ class Registration(models.Model):
     first_name = models.CharField(max_length=200, help_text="This will be public to other participants")
     last_name = models.CharField(max_length=200, help_text="This won't be shared on the website")
     email = models.EmailField(help_text="I will send you event related information to your email, make sure it works")
-    address = models.TextField(max_length=200)
-    country = CountryField()
+    address = models.TextField(max_length=200, blank=True, help_text="Your address. This is not mandatory, but it helps us to know where you're from.")
+    country = CountryField(help_text="What country do you identify with? Not related to your current address, we will just show this as a flag next to your name in the registrations.")
     phone = PhoneNumberField(
         help_text="I might use this to call you for any question or organisational things. There will be a Signal group for the event for which you can sign up if you want, you will receive the link as an email.",
         region="CH"  # Default region, but will accept international formats
@@ -124,7 +125,7 @@ class Registration(models.Model):
         blank=True, 
         help_text="Enter a discount code if you have one"
     )
-    potluck = models.TextField(max_length=200, help_text="What do you plan to bring for the Potluck / International Dinner?")
+    potluck = models.TextField(max_length=200, help_text="What do you plan to bring for the Potluck aka. International Dinner? Check the event program for more info.")
     activity_idea = models.TextField(max_length=200, blank=True, help_text="Do you have an activity idea that you would like to suggest for other participants that we should keep some time in the program for?")
     other_comments = models.TextField(max_length=500, blank=True, help_text="Any other comments or questions?")
     registered_at = models.DateTimeField(auto_now_add=True)

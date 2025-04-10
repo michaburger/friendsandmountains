@@ -193,7 +193,6 @@ def stripe_webhook(request):
                     last_name=registration.last_name,
                     event=registration.event
                 )
-                logger.info(f"Email added to Sender list result: {sender_result}")
                 
             except Registration.DoesNotExist:  # pylint: disable=no-member
                 logger.error(f"Registration {registration_id} not found")
@@ -234,10 +233,8 @@ def add_email_to_sender_list(email, first_name, last_name, event=None):
         }
         
         try:
-            logger.info(f"Sending request to Sender.net: {url} with groups: {groups}")
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
-            logger.info(f"Successfully added email {email} to groups {groups}")
             return True
         except requests.exceptions.RequestException as e:
             # Log detailed error information
@@ -250,16 +247,12 @@ def add_email_to_sender_list(email, first_name, last_name, event=None):
     groups_to_add = []
     
     if event and hasattr(event, 'sender_list_id') and event.sender_list_id:
-        # For backward compatibility with existing list_id fields
-        logger.info(f"Using legacy event-specific list as group: {event.sender_list_id}")
         groups_to_add.append(event.sender_list_id)
     else:
         logger.info("No event-specific group ID available")
     
     # Add general newsletter group
     if hasattr(settings, 'SENDER_LIST_ID') and settings.SENDER_LIST_ID:
-        # For backward compatibility with existing list_id settings
-        logger.info(f"Using legacy newsletter list as group: {settings.SENDER_LIST_ID}")
         groups_to_add.append(settings.SENDER_LIST_ID)
     else:
         logger.warning("No Sender group or list ID configured in settings")
