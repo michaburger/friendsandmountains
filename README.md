@@ -28,6 +28,13 @@ A django website is not as easy to deploy as wordpress, for example. What works 
 For a complete step-by-step guide, check out the official PythonAnywhere documentation:
 [How to deploy a Django web app with PythonAnywhere](https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/)
 
+In the web app section, you have to add both the statics and the media folder:
+
+| URL | Directory |
+| --- | --- |
+| /static/ | /home/yourname/friendsandmountains/fnm/staticfiles |
+| /media/ | /home/yourname/friendsandmountains/fnm/media |
+
 Don't forget about these steps:
 - Export staticfiles: `python manage.py collectstatic`
 - Apply database migrations: `python manage.py migrate`

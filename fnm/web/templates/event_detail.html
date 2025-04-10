@@ -7,6 +7,90 @@
     {{ event.main_image.url }}
 {% endblock header_image_src %}
 
+{% block sidebar %}
+  {% if event.end_date|date:"Y-m-d" >= today and participant_count is not None %}
+    <!-- Registrations card for desktop sidebar -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h5 mb-0">
+          <i class="bi bi-people-fill me-2"></i>
+          Registrations 
+          {% if participant_count > 0 %}
+            {% if max_participants > 0 %}
+              ({{ participant_count }}/{{ max_participants }})
+            {% else %}
+              ({{ participant_count }})
+            {% endif %}
+          {% endif %}
+        </h2>
+      </div>
+      <div class="card-body">
+        {% if event_participants %}
+          <ul class="list-group list-group-flush">
+            {% for participant in event_participants %}
+            <li class="list-group-item d-flex align-items-center px-0">
+              {% if participant.country %}
+              <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
+              {% endif %}
+              {{ participant.name }}
+              {% if participant.friend_name %}
+              <span class="ms-1">+ {{ participant.friend_name }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-center mb-0">No registrations yet</p>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block mobile_sidebar %}
+  {% if event.end_date|date:"Y-m-d" >= today and participant_count is not None %}
+    <!-- Mobile registrations card -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h5 mb-0">
+          <i class="bi bi-people-fill me-2"></i>
+          Registrations
+          {% if participant_count > 0 %}
+            {% if max_participants > 0 %}
+              ({{ participant_count }}/{{ max_participants }})
+            {% else %}
+              ({{ participant_count }})
+            {% endif %}
+          {% endif %}
+        </h2>
+      </div>
+      <div class="card-body">
+        {% if event_participants %}
+          <ul class="list-group list-group-flush">
+            {% for participant in event_participants %}
+            <li class="list-group-item d-flex align-items-center px-0">
+              {% if participant.country %}
+              <span class="fi fi-{{ participant.country.code|lower }} me-2" title="{{ participant.country.name }}"></span>
+              {% endif %}
+              {{ participant.name }}
+              {% if participant.friend_name %}
+              <span class="ms-1">+ {{ participant.friend_name }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-center mb-0">No registrations yet</p>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="event-detail">
   <h1 class="mb-4">{{ event.title }}</h1>
