@@ -114,15 +114,15 @@ class Registration(models.Model):
     checkbox4 = models.BooleanField(default=False, verbose_name="I notice that some pictures of the event might be published on this website after the event and I will talk to the organizers if I don't agree")
     checkbox5 = models.BooleanField(default=False, verbose_name="I have understood that I have to forward all relevant information to the friend I signed up together with me")
     coupon = models.ForeignKey(
-        Coupon, 
-        on_delete=models.SET_NULL, 
-        null=True, 
+        Coupon,
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
         related_name="registrations"
     )
     coupon_code = models.CharField(
-        max_length=50, 
-        blank=True, 
+        max_length=50,
+        blank=True,
         help_text="Enter a discount code if you have one"
     )
     potluck = models.TextField(max_length=200, help_text="What do you plan to bring for the Potluck aka. International Dinner? Check the event program for more info.")
@@ -164,10 +164,25 @@ class Registration(models.Model):
                 if coupon.is_valid():
                     self.coupon = coupon
                     if self.final_price:
-                        self.final_price = max(0, self.final_price - coupon.discount_amount)
+                        # Apply discount amount (doubled if bringing a friend)
+                        discount = coupon.discount_amount
+                        if self.bring_a_friend:
+                            discount = discount * 2
+                        self.final_price = max(0, self.final_price - discount)
             except Coupon.DoesNotExist:  #pylint: disable=no-member
                 # Invalid coupon code, ignore it
                 pass
+        # Handle case when coupon is already set
+        elif self.coupon and self.final_price:
+            # Apply discount amount (doubled if bringing a friend)
+            discount = self.coupon.discount_amount
+            if self.bring_a_friend:
+                discount = discount * 2
+            # Recalculate final price with proper discount
+            if self.bring_a_friend:
+                self.final_price = max(0, self.original_price * 2 - discount)
+            else:
+                self.final_price = max(0, self.original_price - discount)
         
         super().save(*args, **kwargs)
 
