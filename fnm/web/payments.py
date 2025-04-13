@@ -33,12 +33,22 @@ def payment_page(request, registration_id):
         else:
             display_name = f"{display_name} + friend"
 
+    # Calculate discount amount if a coupon was applied
+    discount_amount = 0
+    if registration.coupon:
+        discount_amount = registration.coupon.discount_amount
+        # If bringing a friend, the discount applies twice
+        if registration.bring_a_friend:
+            discount_amount = discount_amount * 2
+
     context = {
         'registration': registration,
         'stripe_public_key': settings.STRIPE_PUBLISHABLE_KEY,
         'amount': int(final_price * 100),  # Convert to cents for Stripe
         'event': registration.event,
         'display_name': display_name,
+        'coupon': registration.coupon,        # Add coupon object to context
+        'discount_amount': discount_amount,   # Add discount amount to context
     }
     return render(request, 'payment.html', context)
 

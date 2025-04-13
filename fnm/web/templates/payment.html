@@ -26,19 +26,26 @@
                             {% if registration.bring_a_friend %}
                                 <tr>
                                     <td>Participation fee (2 persons)</td>
-                                    <td class="text-end">CHF {{ registration.event.price|floatformat:2 }} × 2</td>
+                                    <td class="text-end">CHF {{ registration.event.fee|floatformat:2 }} × 2</td>
                                 </tr>
                             {% else %}
                                 <tr>
                                     <td>Participation fee (1 person)</td>
-                                    <td class="text-end">CHF {{ registration.event.price|floatformat:2 }}</td>
+                                    <td class="text-end">CHF {{ registration.event.fee|floatformat:2 }}</td>
                                 </tr>
                             {% endif %}
                             
-                            {% if registration.discount_code %}
+                            {% if registration.coupon %}
                                 <tr>
-                                    <td>Discount ({{ registration.discount_code.code }})</td>
-                                    <td class="text-end">- CHF {{ registration.discount_amount|floatformat:2 }}</td>
+                                    <td>
+                                        Coupon: {{ registration.coupon.code }}
+                                    </td>
+                                    <td class="text-end">- CHF {{ discount_amount|floatformat:2 }}</td>
+                                </tr>
+                            {% elif registration.coupon_code %}
+                                <tr>
+                                    <td>Coupon: {{ registration.coupon_code }}</td>
+                                    <td class="text-end">- CHF {{ discount_amount|floatformat:2 }}</td>
                                 </tr>
                             {% endif %}
                             

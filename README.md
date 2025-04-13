@@ -6,9 +6,10 @@ Event registration website built with django
 
 ## Features
 - Display past and future events
-- Event with pre-defined data model, matching our event format
+- Event with pre-defined data model, matching a "camp" event format
 - Use markdown format for the description
 - Manage all events in the django admin panel
+- Open and close the registrations as you want
 - Add daily program to the event
 - Add multiple photos as a gallery to each event
 - Event registration form: Register yourself and max. 1 friend
